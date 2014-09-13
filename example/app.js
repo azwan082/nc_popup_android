@@ -15,6 +15,9 @@ btn.addEventListener('click', function() {
     menu.addEventListener('click', function(e) {
         alert('Selected item: '+e.index);
     });
+    menu.addEventListener('dismiss', function() {
+        alert('popup menu has been dismissed');
+    });
     menu.show();
 });
 win.add(btn);
