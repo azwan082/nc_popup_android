@@ -27,6 +27,8 @@ public class PopupMenuProxy extends KrollProxy implements OnMenuItemClickListene
 	
 	private static final String PROPERTY_OPTIONS = "options";
 	private static final String PROPERTY_VIEW = "view";
+	private static final String EVENT_CLICK = "click";
+	private static final String EVENT_DISMISS = "dismiss";
 	
 	private PopupMenu mPopupMenu;
 	
@@ -104,17 +106,17 @@ public class PopupMenuProxy extends KrollProxy implements OnMenuItemClickListene
 
 	@Override
 	public void onDismiss(PopupMenu menu) {
-		if (hasListeners("dismiss")) {
-			fireEvent("dismiss", null);
+		if (hasListeners(EVENT_DISMISS)) {
+			fireEvent(EVENT_DISMISS, null);
 		}
 	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
-		if (hasListeners("click")) {
+		if (hasListeners(EVENT_CLICK)) {
 			KrollDict data = new KrollDict();
 			data.put("index", item.getOrder());
-			fireEvent("click", data);
+			fireEvent(EVENT_CLICK, data);
 		}
 		return true;
 	}
