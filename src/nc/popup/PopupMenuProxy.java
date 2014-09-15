@@ -5,6 +5,7 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiContext;
+import org.appcelerator.titanium.proxy.MenuItemProxy;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 
 import android.os.Message;
@@ -56,6 +57,10 @@ public class PopupMenuProxy extends KrollProxy implements OnMenuItemClickListene
 			if (v instanceof TiViewProxy) {
 				TiViewProxy vp = (TiViewProxy) v;
 				view = vp.getOrCreateView().getOuterView();
+			}
+			
+			if (v instanceof MenuItemProxy) {
+				view = getActivity().findViewById(((MenuItemProxy) v).getItemId());
 			}
 		}
 		if (view == null) {
