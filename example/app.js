@@ -22,4 +22,42 @@ btn.addEventListener('click', function() {
 });
 win.add(btn);
 
+win.addEventListener('open', function(){
+    var activity = win.getActivity();
+    
+    if (activity){
+
+        activity.onCreateOptionsMenu = function(e){
+            
+            e.menu.add({
+                title : "Help",
+                showAsAction : Ti.Android.SHOW_AS_ACTION_NEVER
+            });
+            
+            e.menu.add({
+                title : "About",
+                showAsAction : Ti.Android.SHOW_AS_ACTION_NEVER
+            });
+            
+            var add_menu = e.menu.add({
+                title : "Add",
+                showAsAction : Ti.Android.SHOW_AS_ACTION_ALWAYS
+            });
+            
+            add_menu.addEventListener('click', function(){
+                
+                // This is how you can use a PopupMenu as a SubMenu
+                var menu = popup.createPopupMenu({
+                    options: ['User', 'Project', 'Item'],
+                    view: add_menu
+                });
+                menu.addEventListener('click', function(e) {
+                    Ti.API.info('Selected item: '+e.index);
+                });
+                menu.show();
+            });
+        };
+    }
+});
+
 win.open();
