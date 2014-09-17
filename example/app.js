@@ -29,16 +29,6 @@ win.addEventListener('open', function(){
 
         activity.onCreateOptionsMenu = function(e){
             
-            e.menu.add({
-                title : "Help",
-                showAsAction : Ti.Android.SHOW_AS_ACTION_NEVER
-            });
-            
-            e.menu.add({
-                title : "About",
-                showAsAction : Ti.Android.SHOW_AS_ACTION_NEVER
-            });
-            
             var add_menu = e.menu.add({
                 title : "Add",
                 showAsAction : Ti.Android.SHOW_AS_ACTION_ALWAYS
