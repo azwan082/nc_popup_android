@@ -5,6 +5,7 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiContext;
+import org.appcelerator.titanium.proxy.MenuItemProxy;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 
 import android.os.Message;
@@ -16,7 +17,7 @@ import android.widget.PopupMenu.OnDismissListener;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
 @Kroll.proxy(creatableInModule=NcPopupModule.class)
-public class PopupMenuProxy extends KrollProxy {
+public class PopupMenuProxy extends KrollProxy implements OnMenuItemClickListener, OnDismissListener{
 
 	private static final String TAG = "NcPopupModule";
 	
@@ -26,6 +27,8 @@ public class PopupMenuProxy extends KrollProxy {
 	
 	private static final String PROPERTY_OPTIONS = "options";
 	private static final String PROPERTY_VIEW = "view";
+	private static final String EVENT_CLICK = "click";
+	private static final String EVENT_DISMISS = "dismiss";
 	
 	private PopupMenu mPopupMenu;
 	
@@ -57,6 +60,10 @@ public class PopupMenuProxy extends KrollProxy {
 				TiViewProxy vp = (TiViewProxy) v;
 				view = vp.getOrCreateView().getOuterView();
 			}
+			
+			if (v instanceof MenuItemProxy) {
+				view = getActivity().findViewById(((MenuItemProxy) v).getItemId());
+			}
 		}
 		if (view == null) {
 			throw new IllegalArgumentException("'view' is required");
@@ -64,22 +71,8 @@ public class PopupMenuProxy extends KrollProxy {
 		
 		mPopupMenu = new PopupMenu(getActivity(), view);
 		
-		mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				KrollDict data = new KrollDict();
-				data.put("index", item.getOrder());
-				fireEvent("click", data);
-				return true;
-			}
-		});
-		
-		mPopupMenu.setOnDismissListener(new OnDismissListener() {
-			@Override
-			public void onDismiss(PopupMenu menu) {
-				fireEvent("dismiss", null);
-			}
-		});
+		mPopupMenu.setOnMenuItemClickListener(this);
+		mPopupMenu.setOnDismissListener(this);
 		
 		int i = 0;
 		for (String option : options) {
@@ -109,6 +102,23 @@ public class PopupMenuProxy extends KrollProxy {
 
 	private void handleShow() {
 		mPopupMenu.show();
+	}
+
+	@Override
+	public void onDismiss(PopupMenu menu) {
+		if (hasListeners(EVENT_DISMISS)) {
+			fireEvent(EVENT_DISMISS, null);
+		}
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		if (hasListeners(EVENT_CLICK)) {
+			KrollDict data = new KrollDict();
+			data.put("index", item.getOrder());
+			fireEvent(EVENT_CLICK, data);
+		}
+		return true;
 	}
 
 }
