@@ -4,7 +4,6 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.titanium.TiContext;
 import org.appcelerator.titanium.proxy.MenuItemProxy;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 
@@ -20,47 +19,44 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 public class PopupMenuProxy extends KrollProxy implements OnMenuItemClickListener, OnDismissListener{
 
 	private static final String TAG = "NcPopupModule";
-	
+
 	private static final int MSG_FIRST_ID = KrollProxy.MSG_LAST_ID + 1;
 	private static final int MSG_SHOW = MSG_FIRST_ID + 100;
 	protected static final int MSG_LAST_ID = MSG_FIRST_ID + 999;
-	
+
 	private static final String PROPERTY_OPTIONS = "options";
 	private static final String PROPERTY_VIEW = "view";
 	private static final String EVENT_CLICK = "click";
 	private static final String EVENT_DISMISS = "dismiss";
-	
+
 	private PopupMenu mPopupMenu;
-	
+
 	public PopupMenuProxy() {
 		super();
 	}
-	
-	public PopupMenuProxy(TiContext tiContext) {
-		this();
-	}
+
 
 	@Override
 	public void handleCreationDict(KrollDict dict) {
 		super.handleCreationDict(dict);
-		
+
 		String[] options = null;
 		View view = null;
-		
+
 		if (dict.containsKey(PROPERTY_OPTIONS)) {
 			options = dict.getStringArray(PROPERTY_OPTIONS);
 		}
 		if (options == null) {
 			throw new IllegalArgumentException("'options' is required");
 		}
-		
+
 		if (dict.containsKey(PROPERTY_VIEW)) {
 			Object v = dict.get(PROPERTY_VIEW);
 			if (v instanceof TiViewProxy) {
 				TiViewProxy vp = (TiViewProxy) v;
 				view = vp.getOrCreateView().getOuterView();
 			}
-			
+
 			if (v instanceof MenuItemProxy) {
 				view = getActivity().findViewById(((MenuItemProxy) v).getItemId());
 			}
