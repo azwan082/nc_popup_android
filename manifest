@@ -2,18 +2,17 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 3.0
-apiversion: 3
+version: 4.0
+apiversion: 4
+architectures: arm64-v8a armeabi-v7a x86
 description: Android PopupMenu
 author: azwan082
-architectures: armeabi-v7a x86
 license: Apache License 2.0
 copyright: Copyright (c) 2017 by noodlecode.net
-
 
 # these should not be edited
 name: nc_popup
 moduleid: nc.popup
 guid: cabc314a-0f20-4850-85e2-534a25b969f5
 platform: android
-minsdk: 6.0.0.GA
+minsdk: 7.0.0.GA
